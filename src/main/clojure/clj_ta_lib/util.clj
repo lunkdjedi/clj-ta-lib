@@ -29,15 +29,22 @@
           (cond 
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_RealRange) 
             (let [rrange (.getOptInputRealRange function i)] 
-              (println (str "       min=" (.min rrange) " max=" (.max rrange) " precision=" (.precision rrange) " default=" (.defaultValue rrange))))
+              (println "     "
+                (str " min=" (.min rrange) 
+	                   " max=" (.max rrange) 
+	                   " precision=" (.precision rrange) 
+	                   " default=" (.defaultValue rrange))))
                                                            
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_RealList) 
             (let [rlist (.getOptInputRealList function i)] 
-              (println (map #(str "      " %1 "(" %2 ")") (.string rlist) (.value rlist))))
+              (println "      " (map #(str %1 "(" %2 ")") (.string rlist) (.value rlist))))
             
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_IntegerRange) 
             (let [irange (.getOptInputIntegerRange function i)] 
-              (println (str "       min=" (.min irange) " max=" (.max irange) " default=" (.defaultValue irange))))
+              (println "     " 
+                (str " min=" (.min irange) 
+                     " max=" (.max irange) 
+                     " default=" (.defaultValue irange))))
 
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_IntegerList) 
             (let [ilist (.getOptInputIntegerList function i)]
