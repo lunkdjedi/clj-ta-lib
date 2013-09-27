@@ -14,9 +14,8 @@
 (defn print-groups []
   (CoreMetaData/forEachGrp group-service))
 
-(def function-service (proxy [TaFuncService] []
-  (execute [function]
-    (println (str "Name: " (.name (.getFuncInfo function))))
+(defn print-function [function]
+  (println (str "Name: " (.name (.getFuncInfo function))))
 
     ;PRINT INPUTS
       (doseq [i (range (-> function .getFuncInfo .nbInput))]
@@ -49,7 +48,12 @@
     ;PRINT OUTPUTS
       (doseq [i (range (-> function .getFuncInfo .nbOutput))]
         (let [pinfo (.getOutputParameterInfo function i)]
-          (println "  " (-> pinfo .paramName) (-> pinfo .type .name)))))))
+          (println "  " (-> pinfo .paramName) (-> pinfo .type .name)))))
+
+  
+(def function-service (proxy [TaFuncService] []
+  (execute [function]
+    (print-function function))))
 
 
 (defn print-functions []
