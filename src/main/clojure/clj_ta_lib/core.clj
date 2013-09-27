@@ -1,26 +1,10 @@
 (ns clj-ta-lib.core
-   (:import [com.tictactec.ta.lib.meta CoreMetaData PriceHolder]
-            [com.tictactec.ta.lib MInteger])
-   (:use [clj-ta-lib.yahoo]))
+   (:import [com.tictactec.ta.lib.meta CoreMetaData]
+            [com.tictactec.ta.lib MInteger]))
 
 (defn getFunc [func]
   (CoreMetaData/getInstance func))
 
-(defn getFunctionInputFlags [func]
-  (.flags (.getInputParameterInfo (getFunc func) 0)))
-
-(defn yahoo-price-holder 
-  [ticker function]
-	  (let [data (yahoo-vector ticker)
-         flags (getFunctionInputFlags function)]
-	    (PriceHolder. flags
-	                  (double-array (nth data 1))
-	                  (double-array (nth data 2))
-	                  (double-array (nth data 3))
-	                  (double-array (nth data 4))
-	                  (double-array (nth data 5))
-	                  (double-array (count (nth data 1))))))
-  
 (defn acos [data-array]
   (let [func (getFunc "acos")
         input (double-array data-array)
@@ -35,7 +19,7 @@
       [(vec output)] 
       {:begIndex (.value begIndex) :nbElements (.value outNbElements) :lookback (.getLookback func)})))
 
-(defn sma [window data-array]
+(defn sma [data-array time-period]
   (let [func (getFunc "sma")
         input (double-array data-array)
         size (count input)
@@ -44,7 +28,22 @@
         output (double-array size)]
     (.setInputParamReal func 0 input)
     (.setOutputParamReal func 0 output)
-    (.setOptInputParamInteger func 0 window)
+    (.setOptInputParamInteger func 0 time-period)
+    (.callFunc func 0 (- size 1) begIndex outNbElements)
+    (with-meta 
+      [(vec output)] 
+      {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)})))
+
+(defn ema [data-array time-period]
+  (let [func (getFunc "ema")
+        input (double-array data-array)
+        size (count input)
+        begIndex (MInteger.)
+        outNbElements (MInteger.)
+        output (double-array size)]
+    (.setInputParamReal func 0 input)
+    (.setOutputParamReal func 0 output)
+    (.setOptInputParamInteger func 0 time-period)
     (.callFunc func 0 (- size 1) begIndex outNbElements)
     (with-meta 
       [(vec output)] 
@@ -65,5 +64,18 @@
       [(vec output)] 
       {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)})))
             
-    
+(defn rsi [data-array time-period]
+  (let [func (getFunc "rsi")
+        input (double-array data-array)
+        size (count input)
+        begIndex (MInteger.)
+        outNbElements (MInteger.)
+        output (double-array size)]
+    (.setInputParamReal func 0 input)
+    (.setOutputParamReal func 0 output)
+    (.setOptInputParamInteger func 0 time-period)
+    (.callFunc func 0 (- size 1) begIndex outNbElements)
+    (with-meta 
+      [(vec output)] 
+      {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)})))
   
