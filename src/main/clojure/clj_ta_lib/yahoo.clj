@@ -39,12 +39,6 @@ Dates maintain default string format while other values are converted to BigDeci
         (into [] (map read-string (nth column-data 5))) ;Volume
     ]))
 
-(defn getFunctionInputFlags [func]
-  (let [flags (.flags (.getInputParameterInfo (getFunc func) 0))] 
-    (if (zero? flags)
-      255
-      flags)))
-
 (defn yahoo-price-holder 
     ([ticker]
 	  (let [data (yahoo-vector ticker)]
@@ -54,15 +48,5 @@ Dates maintain default string format while other values are converted to BigDeci
 	                  (double-array (nth data 4));close
 	                  (double-array (nth data 5));volume
 	                  (double-array (count (nth data 1));open interest
-                                 ))))
-  ([ticker function]
-	  (let [data (yahoo-vector ticker)
-         flags (getFunctionInputFlags function)]
-	    (PriceHolder. flags
-	                  (double-array (nth data 1));open
-	                  (double-array (nth data 2));high
-	                  (double-array (nth data 3));low
-	                  (double-array (nth data 4));close
-	                  (double-array (nth data 5));volume
-	                  (double-array (count (nth data 1));open interest
                                  )))))
+
