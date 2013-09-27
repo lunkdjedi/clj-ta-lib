@@ -1,21 +1,8 @@
 (ns clj-ta-lib.yahoo
-  (:require [clj-time.core :as time]
-            [clj-time.format :as fmt])
   (:import [com.tictactec.ta.lib.meta CoreMetaData PriceHolder])
   (:use [clojure.core memoize]
         [clojure.string :only (join split)]))
   
-(def custom-formatter (fmt/formatter "yyyy-MM-dd"))
-
-(defn to-milliseconds-from-epoch [x]
-  (time/in-millis (time/interval (time/epoch) (fmt/parse custom-formatter x))))
-
-(defn to-year [x]
-  (time/year (fmt/parse custom-formatter x)))
-
-(defn days-ago-in-millis [d]
-  (time/in-millis (time/interval (time/epoch) (time/from-now (time/days (- 1 d))))))
-
 (defn- yahoo-raw-data [symbol]
   (slurp (str "http://ichart.finance.yahoo.com/table.csv?s=" symbol)))
 
