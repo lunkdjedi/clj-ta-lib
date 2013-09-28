@@ -35,7 +35,7 @@
           (double-array ticks))))
     
   
-(defn helper [name input & options]
+(defn ta-helper [name input & options]
   (let [func (getFunc name)
         nbOptInputs (-> func .getFuncInfo .nbOptInput)
         nbInputs (-> func .getFuncInfo .nbInput)
