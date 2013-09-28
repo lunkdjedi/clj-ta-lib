@@ -4,10 +4,10 @@
            [com.tictactec.ta.lib MInteger]
            [java.lang Exception]))
 
-(defn getFunc [func]
+(defn- getFunc [func]
   (CoreMetaData/getInstance func))
 
-(defn addflags [price-holder flags]
+(defn- addflags [price-holder flags]
   (let [bean (bean price-holder)]
 		(PriceHolder. flags
 		             (:o bean);open
@@ -18,7 +18,7 @@
 		             (:i bean);open interest
 		            )))
 
-(defn getFunctionInputFlags [func]
+(defn- getFunctionInputFlags [func]
   (let [flags (.flags (.getInputParameterInfo func 0))] 
     (if (zero? flags)
       (bit-or InputFlags/TA_IN_PRICE_OPEN 
@@ -29,7 +29,7 @@
               InputFlags/TA_IN_PRICE_OPENINTEREST)
       flags)))
 
-(defn get-out-array [size ticks]
+(defn- get-out-array [size ticks]
   (into [] 
         (for [i (range size)]
           (double-array ticks))))
@@ -82,6 +82,8 @@
 			(throw (Exception. "Invalid number of inputs"))))
     
     
+    
+    
     ; At this point we need the size or number of ticks of the inputs
     (let [pinfo (.getInputParameterInfo func 0)]
 	    (if (= (-> pinfo .type) InputParameterType/TA_Input_Price)
@@ -101,8 +103,7 @@
           (= (-> pinfo .type) OutputParameterType/TA_Output_Integer)
           (.setOutputParamInteger func i (nth @output i))
           
-          :else 
-          (throw (Exception. "Invalid Argument - Output")))))
+          )))
     
     (.callFunc func 0 (- @inputSize 1) begIndex outNbElements)
     
