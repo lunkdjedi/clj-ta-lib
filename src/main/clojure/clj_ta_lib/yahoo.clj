@@ -54,3 +54,6 @@ Dates maintain default string format while other values are converted to BigDeci
 ; memoize price holder data structure for 4 hours
 (def yahoo-price-holder 
   (clojure.core.memoize/ttl yahoo-price-holder :ttl/threshold (* 4 60 60 1000)))
+
+(defn close-data [ticker] 
+  (:c (bean (yahoo-price-holder ticker))))
