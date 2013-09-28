@@ -81,14 +81,11 @@
 			((clj-ta-lib.util/print-function func) 
 			(throw (Exception. "Invalid number of inputs"))))
     
-    
-    
-    
     ; At this point we need the size or number of ticks of the inputs
     (let [pinfo (.getInputParameterInfo func 0)]
 	    (if (= (-> pinfo .type) InputParameterType/TA_Input_Price)
-	      (compare-and-set! inputSize nil (count (:c (bean (nth input 0)))))
-	      (compare-and-set! inputSize nil (count (nth input 0)))))
+	      (compare-and-set! inputSize nil (count (:c (bean (first input)))))
+	      (compare-and-set! inputSize nil (count (first input)))))
     
     ;Construct output arrays
     (compare-and-set! output nil (get-out-array nbOutputs @inputSize))
