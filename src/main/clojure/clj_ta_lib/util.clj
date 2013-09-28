@@ -39,7 +39,9 @@
                                                            
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_RealList) 
             (let [rlist (.getOptInputRealList function i)] 
-              (println "      " (map #(str %2 "-" %1) (.string rlist) (.value rlist))))
+              (println 
+                (map #(str %2 "-" %1) (.string rlist) (.value rlist)) 
+                "default="(.defaultValue rlist)))
             
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_IntegerRange) 
             (let [irange (.getOptInputIntegerRange function i)] 
@@ -50,9 +52,10 @@
 
             (= (-> pinfo .type) OptInputParameterType/TA_OptInput_IntegerList) 
             (let [ilist (.getOptInputIntegerList function i)]
-              (println "" (map #(str %2 "-" %1) (.string ilist) (.value ilist))))
-            )
-          ))
+              (println 
+                (map #(str %2 "-" %1) (.string ilist) (.value ilist))
+                "default="(.defaultValue ilist)))
+          )))
     
     ;PRINT OUTPUTS
       (doseq [i (range (-> function .getFuncInfo .nbOutput))]
