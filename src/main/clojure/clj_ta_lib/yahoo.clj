@@ -55,13 +55,8 @@ Dates maintain default string format while other values are converted to BigDeci
 (def price-holder 
   (clojure.core.memoize/ttl yahoo-price-holder :ttl/threshold (* 4 60 60 1000)))
 
-(defn open [ticker] 
-  (:o (bean (yahoo-price-holder ticker))))
-(defn high [ticker] 
-  (:h (bean (yahoo-price-holder ticker))))
-(defn low [ticker] 
-  (:l (bean (yahoo-price-holder ticker))))
-(defn close [ticker] 
-  (:c (bean (yahoo-price-holder ticker))))
-(defn volume [ticker] 
-  (:v (bean (yahoo-price-holder ticker))))
+(defn open [price-holder] (:o (bean price-holder)))
+(defn high [price-holder] (:h (bean price-holder)))
+(defn low [price-holder] (:l (bean price-holder)))
+(defn close [price-holder] (:c (bean price-holder)))
+(defn volume [price-holder] (:v (bean price-holder)))
