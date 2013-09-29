@@ -30,12 +30,19 @@
               InputFlags/TA_IN_PRICE_OPENINTEREST)
       flags)))
 
-(defn- get-out-array [size ticks]
-  (into [] 
-        (for [i (range size)]
-          (double-array ticks))))
-    
-  
+(defn get-out-array [func ticks]
+  (let [output (atom [])]
+	  (doseq [i (range (-> func .getFuncInfo .nbOutput))]
+		  (let [pinfo (.getOutputParameterInfo func i)]
+		    (cond
+					(= (-> pinfo .type) OutputParameterType/TA_Output_Real)
+					(swap! output conj (double-array ticks))
+					
+					(= (-> pinfo .type) OutputParameterType/TA_Output_Integer)
+					(swap! output conj (int-array ticks)))))
+   
+   @output))
+        
 (defn ta 
   ([name]
     (print-function (getFunc name)))
@@ -92,7 +99,7 @@
 		      (compare-and-set! inputSize nil (count (first input)))))
 	    
 	    ;Construct output arrays
-	    (compare-and-set! output nil (get-out-array nbOutputs @inputSize))
+	    (compare-and-set! output nil (get-out-array func @inputSize))
 	    
 	    ;Set Output Paramters
 	    (doseq [i (range nbOutputs)]
