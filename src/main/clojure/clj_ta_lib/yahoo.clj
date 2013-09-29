@@ -7,10 +7,10 @@
   (slurp (str "http://ichart.finance.yahoo.com/table.csv?s=" symbol)))
 
 ;memoize raw data for five minutes
-(def yahoo-raw-data 
-  (clojure.core.memoize/ttl yahoo-raw-data :ttl/threshold (* 5 60 1000)))
+;(def yahoo-raw-data 
+;  (clojure.core.memoize/ttl yahoo-raw-data :ttl/threshold (* 5 60 1000)))
 
-(defn yahoo-data 
+(defn- yahoo-data 
 "
 Returns a sequence of vectors 
 where each vector represents daily open high low close and volume data
@@ -25,7 +25,7 @@ where each vector represents daily open high low close and volume data
             	(split raw-data #"\n")))))) ; Split the raw data by new line character
 
 
-(defn yahoo-vector [ticker]
+(defn- yahoo-vector [ticker]
 "
 Returns a vector of index-aligned vectors for stock history of provided ticker
 Dates maintain default string format while other values are converted to BigDecimal 
@@ -52,8 +52,16 @@ Dates maintain default string format while other values are converted to BigDeci
                                  )))))
 
 ; memoize price holder data structure for 4 hours
-(def yahoo-price-holder 
+(def price-holder 
   (clojure.core.memoize/ttl yahoo-price-holder :ttl/threshold (* 4 60 60 1000)))
 
-(defn close-data [ticker] 
+(defn open [ticker] 
+  (:o (bean (yahoo-price-holder ticker))))
+(defn high [ticker] 
+  (:h (bean (yahoo-price-holder ticker))))
+(defn low [ticker] 
+  (:l (bean (yahoo-price-holder ticker))))
+(defn close [ticker] 
   (:c (bean (yahoo-price-holder ticker))))
+(defn volume [ticker] 
+  (:v (bean (yahoo-price-holder ticker))))
