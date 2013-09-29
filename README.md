@@ -9,21 +9,47 @@ Please open issues against the [official clj-ta-lib repo on Github](https://gith
 
 ## Usage
 
+### Running from Maven
+
+This project can be used directly from maven with a repl.
+
+```
+$ mvn package clojure:repl
+```
+
 ### clj-ta-lib.core
 
 The main namespace for ta-helper operations in the `clj-ta-lib` library is `clj-ta-lib.core`.
 
 ``` clj
-=> (use 'clj-ta-lib.core)
+user=> (use 'clj-ta-lib.core)
 ``` 
 
-There is also an optional library to fetch historical prices from Yahoo. 
+Get information about ta function
 
 ``` clj
-=> (use 'clj-ta-lib.yahoo)
-=> (yahoo-price-holder "INTC")
-#<PriceHolder com.tictactec.ta.lib.meta.PriceHolder@3823bdd1>
-=>
+user=> (ta "ADD")
+user=> (ta "SIN")
+user=> (ta "WILLR")
+user=> (ta "BBANDS")
+``` 
+
+The input to every ta function must be placed in a clojure vector. The input types into the vector can be double-arrays or PriceHolders. Output is always a sequence of vectors.
+
+``` clj
+user=> (ta "SIN" [ (double-array [1 2 3]) ])
+([0.8414709848078965 0.9092974268256817 0.1411200080598672])
+user=> (ta "ADD" [ (double-array [10 100 1000]) (double-array [1 2 3]) ])
+([11.0 102.0 1003.0])
+```
+
+PriceHolders are a datatype from the ta-lib java code and I have included an optional library to get complete historical PriceHolders from Yahoo. 
+
+``` clj
+user=> (use 'clj-ta-lib.yahoo)
+user=> (def INTC (price-holder "INTC"))
+#'user/INTC
+user=> (ta "sma" [INTC] 50)
 ``` 
 
 
