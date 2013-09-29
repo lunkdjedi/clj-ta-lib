@@ -2,7 +2,8 @@
   (:import [com.tictactec.ta.lib.meta CoreMetaData PriceHolder]
            [com.tictactec.ta.lib.meta.annotation InputFlags OptInputParameterType InputParameterType OutputParameterType]
            [com.tictactec.ta.lib MInteger]
-           [java.lang Exception]))
+           [java.lang Exception])
+  (:use [clj-ta-lib util yahoo]))
 
 (defn- getFunc [func]
   (CoreMetaData/getInstance func))
@@ -105,7 +106,7 @@
     (.callFunc func 0 (- @inputSize 1) begIndex outNbElements)
     
     (with-meta
-      (into [] (map vec @output))
+      (map vec @output)
       {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)}))
         
     )
