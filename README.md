@@ -49,7 +49,13 @@ PriceHolders are a datatype from the ta-lib java code and I have included an opt
 user=> (use 'clj-ta-lib.yahoo)
 user=> (def INTC (price-holder "INTC"))
 #'user/INTC
-user=> (ta "sma" [INTC] 50)
+user=> (ta "sma" [(close INTC)] 50)
+user=> (meta (ta "sma" [(close INTC)] 50))
+{:begIndex 49, :nbElements 6816, :lookback 49}
+user=> (ta "ema" [(close INTC)] 20)
+user=> (ta "rsi" [(close INTC)] 20)
+user=> (ta "willr" [INTC] 20)
+user=> (ta "bbands" [(close INTC)] 5 2.0 2.0 0)
 ``` 
 
 
