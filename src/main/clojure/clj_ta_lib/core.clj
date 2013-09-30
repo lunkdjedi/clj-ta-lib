@@ -73,7 +73,7 @@
 	           
 	           :else
 	           (throw (Exception. "InvalidArgument - Options")))))
-	      ((clj-ta-lib.util/print-function func)
+	      ((print-function func)
 	      (throw (Exception. "Invalid number of options"))))
 	    
 	    ;Set Inputs
@@ -89,7 +89,7 @@
 				      
 				      (= (-> pinfo .type) InputParameterType/TA_Input_Integer)
 				      (.setInputParamInteger func i (nth input i)))))
-				((clj-ta-lib.util/print-function func) 
+				((print-function func) 
 				(throw (Exception. "Invalid number of inputs"))))
 	    
 	    ; At this point we need the size or number of ticks of the inputs
@@ -117,6 +117,6 @@
 	    
 	    (with-meta
 	      (map vec @output)
-	      {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)})))
+	      {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)}))))
         
-    )
+   

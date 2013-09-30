@@ -91,7 +91,7 @@ user=> (map #(take 2 %) (ta "bbands" [(close INTC)] 5 2.0 2.0 0))
 
 ### Functions
 
-You can view all of the functions by calling (clj-ta-lib.util/print-groups) and (clj-ta-lib.util/print-functions)
+You can view all of the functions by calling ``(clj-ta-lib.util/print-groups)`` and ``(clj-ta-lib.util/print-functions)``
 
 ```
 Group: Cycle Indicators
