@@ -1,7 +1,7 @@
 # `clj-ta-lib`
 ==========
 
-Clojure Wrapper of TA-LIB
+Clojure Technical Analysis Library. Clojure Wrapper of TA-LIB
 
 ## Bugs and Enhancements
 
