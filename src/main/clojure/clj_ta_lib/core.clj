@@ -54,7 +54,8 @@
 	        begIndex (MInteger.)
 	        outNbElements (MInteger.)
 	        inputSize (atom nil)
-	        output (atom nil)]
+	        output (atom nil)
+          outputCols (atom [])]
 	
 	    ;Set Options
 	    (if (= (count options) nbOptInputs)
@@ -109,14 +110,23 @@
 	          (.setOutputParamReal func i (nth @output i))
 	          
 	          (= (-> pinfo .type) OutputParameterType/TA_Output_Integer)
-	          (.setOutputParamInteger func i (nth @output i))
-	          
-	          )))
+	          (.setOutputParamInteger func i (nth @output i)))
+         
+         (swap! outputCols conj (-> pinfo .paramName))
+         
+         ))
 	    
 	    (.callFunc func 0 (- @inputSize 1) begIndex outNbElements)
 	    
 	    (with-meta
 	      (map vec @output)
-	      {:begIndex (.value begIndex) :nbElements (.value outNbElements)  :lookback (.getLookback func)}))))
+	      {:begIndex (.value begIndex) 
+         :nbElements (.value outNbElements)  
+         :lookback (.getLookback func)
+         :name (.name (.getFuncInfo func))
+         :options options
+         :columns @outputCols})
+     
+     )))
         
    
