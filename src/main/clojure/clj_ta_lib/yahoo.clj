@@ -1,14 +1,14 @@
 (ns clj-ta-lib.yahoo
   (:import [com.tictactec.ta.lib.meta PriceHolder])
-  (:require clojure.core.memoize)
+  (:require [clojure.core memoize])
   (:use [clojure.string :only (join split)]))
 
 (defn- yahoo-raw-data [symbol]
   (slurp (str "http://ichart.finance.yahoo.com/table.csv?s=" symbol)))
 
-;memoize raw data for five minutes
-;(def yahoo-raw-data 
-;  (clojure.core.memoize/ttl yahoo-raw-data :ttl/threshold (* 5 60 1000)))
+;memoize raw data for 12 hours
+(def yahoo-raw-data 
+  (clojure.core.memoize/ttl yahoo-raw-data :ttl/threshold (* 12 60 60 1000)))
 
 (defn- yahoo-data 
 "
@@ -40,7 +40,7 @@ Dates maintain default string format while other values are converted to BigDeci
         (into [] (map read-string (nth column-data 5))) ;Volume
     ]))
 
-(defn- yahoo-price-holder 
+(defn price-holder 
     ([ticker]
 	  (let [data (yahoo-vector ticker)]
 	    (PriceHolder. (double-array (nth data 1));open
@@ -52,8 +52,8 @@ Dates maintain default string format while other values are converted to BigDeci
                                  )))))
 
 ; memoize price holder data structure for 4 hours
-(def price-holder 
-  (clojure.core.memoize/ttl yahoo-price-holder :ttl/threshold (* 4 60 60 1000)))
+;(def price-holder 
+;  (clojure.core.memoize/ttl yahoo-price-holder :ttl/threshold (* 4 60 60 1000)))
 
 (defn open [price-holder] (:o (bean price-holder)))
 (defn high [price-holder] (:h (bean price-holder)))

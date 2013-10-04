@@ -112,21 +112,17 @@
 	          (= (-> pinfo .type) OutputParameterType/TA_Output_Integer)
 	          (.setOutputParamInteger func i (nth @output i)))
          
-         (swap! outputCols conj (-> pinfo .paramName))
-         
-         ))
+          (swap! outputCols conj (-> pinfo .paramName))))
 	    
 	    (.callFunc func 0 (- @inputSize 1) begIndex outNbElements)
 	    
 	    (with-meta
-	      (map vec @output)
+	      @output
 	      {:begIndex (.value begIndex) 
          :nbElements (.value outNbElements)  
          :lookback (.getLookback func)
          :name (.name (.getFuncInfo func))
          :options options
-         :columns @outputCols})
-     
-     )))
+         :columns @outputCols}))))
         
    
