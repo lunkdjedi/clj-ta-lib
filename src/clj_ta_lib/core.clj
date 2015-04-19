@@ -8,6 +8,21 @@
 (defn- getFunc [func]
   (CoreMetaData/getInstance func))
 
+(defprotocol Analyzable
+  (sma [this period] "Simple Moving Average")
+  (willr [this period] "Williams %R")
+  (rsi [this period] "Relative Strength Index"))
+
+(extend-type com.tictactec.ta.lib.meta.PriceHolder
+  Analyzable
+  (sma [price-holder period] 
+    (ta "sma" [(.getC price-holder)] period))
+  (willr [price-holder period] 
+    (ta "willr" [price-holder] period))
+  (rsi [price-holder period] 
+    (ta "rsi" [(.getC price-holder)] period)))
+
+
 (defn- addflags [price-holder flags]
   (let [bean (bean price-holder)]
 		(PriceHolder. flags
